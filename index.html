@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Favorite Person ❤️</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&family=Dancing+Script:wght@500;600;700&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#09060b;color:#fff;font-family:Poppins,sans-serif;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,70,130,.13),transparent 30%),
+    radial-gradient(circle at 80% 70%,rgba(170,70,255,.11),transparent 30%);
+}
+canvas{position:fixed;inset:0;z-index:1;pointer-events:none}
+.container{width:min(1050px,90%);margin:auto;position:relative;z-index:2}
+section{min-height:100vh;display:flex;align-items:center;padding:90px 0;position:relative}
+.hero{text-align:center;justify-content:center}
+.eyebrow{letter-spacing:5px;text-transform:uppercase;font-size:.7rem;color:#ff9bbb;margin-bottom:20px}
+h1,h2{font-family:"Cormorant Garamond",serif}
+.hero h1{font-size:clamp(4rem,12vw,9rem);line-height:.85;font-weight:600}
+.hero h1 span{color:#ff6f9d}
+.subtitle{max-width:650px;margin:28px auto;color:#d7ccd3;line-height:1.9;font-size:1rem}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,130,170,.5);background:rgba(255,80,130,.12);
+  color:white;border-radius:999px;padding:14px 26px;text-decoration:none;
+  transition:.3s;cursor:pointer;font-family:Poppins
+}
+.btn:hover{transform:translateY(-3px);background:rgba(255,80,130,.22);box-shadow:0 10px 40px rgba(255,50,120,.18)}
+.scroll{margin-top:55px;font-size:.72rem;letter-spacing:3px;color:#938791}
+.center{text-align:center}
+.title{font-size:clamp(3rem,8vw,6rem);line-height:.95;margin-bottom:25px}
+.lead{color:#c9bdc5;line-height:2;max-width:750px;margin:0 auto}
+.letter{
+  margin:45px auto 0;max-width:780px;padding:40px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.09);
+  border-radius:25px;box-shadow:0 25px 80px rgba(0,0,0,.3);
+}
+.letter p{color:#ded4da;line-height:2;margin-bottom:20px}
+.signature{font-family:"Dancing Script",cursive;font-size:2rem;color:#ff91b1;margin-top:30px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:45px}
+.card{
+  padding:30px 24px;min-height:190px;border-radius:22px;
+  background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.08);transition:.35s;
+}
+.card:hover{transform:translateY(-8px);border-color:rgba(255,120,160,.35)}
+.icon{font-size:2rem;margin-bottom:18px}
+.card h3{font-family:"Cormorant Garamond",serif;font-size:1.8rem;margin-bottom:10px}
+.card p{font-size:.88rem;color:#bfb2ba;line-height:1.7}
+.timeline{max-width:760px;margin:50px auto 0}
+.event{display:grid;grid-template-columns:110px 1fr;gap:25px;margin-bottom:35px}
+.date{color:#ff8eae;font-size:.75rem;letter-spacing:2px;padding-top:5px}
+.eventbox{padding:25px;border-left:1px solid rgba(255,120,160,.35);background:rgba(255,255,255,.025);border-radius:0 18px 18px 0}
+.eventbox h3{font-family:"Cormorant Garamond",serif;font-size:1.8rem;margin-bottom:8px}
+.eventbox p{color:#bfb3ba;line-height:1.8;font-size:.9rem}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:45px}
+.photo{
+  aspect-ratio:1/1.15;border-radius:20px;overflow:hidden;
+  background:linear-gradient(135deg,#24101b,#110b13);
+  border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;
+  color:#796c75;text-align:center;padding:20px;
+}
+.photo span{font-size:.8rem}
+.final{
+  min-height:85vh;text-align:center;justify-content:center;
+  background:radial-gradient(circle at center,rgba(255,70,120,.10),transparent 55%);
+}
+.final h2{font-size:clamp(3.5rem,10vw,8rem);line-height:.85}
+.final p{margin:25px auto;max-width:600px;color:#cfc3ca;line-height:1.9}
+.small{font-size:.7rem;letter-spacing:3px;color:#756a72;margin-top:35px}
+.music{
+  position:fixed;right:20px;bottom:20px;z-index:5;width:48px;height:48px;
+  border-radius:50%;border:1px solid rgba(255,150,180,.35);background:rgba(20,10,18,.75);
+  color:white;cursor:pointer;backdrop-filter:blur(10px)
+}
+.reveal{opacity:0;transform:translateY(35px);transition:1s ease}
+.reveal.show{opacity:1;transform:none}
+@media(max-width:750px){
+  .cards,.gallery{grid-template-columns:1fr}
+  .card{min-height:150px}
+  .event{grid-template-columns:1fr;gap:8px}
+  .date{padding-left:20px}
+  .letter{padding:25px}
+}
+
+/* POP-THE-BALLOONS INTRO */
+#balloonGate{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,rgba(55,10,35,.98),rgba(5,3,8,.99));transition:.8s}
+#balloonGate.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.balloon-wrap{text-align:center;width:min(900px,92%);position:relative}.balloon-wrap h2{font-size:clamp(2.8rem,7vw,5.5rem);margin-bottom:10px}.balloon-wrap p{color:#cdbfc8;margin-bottom:28px}
+.balloons{height:360px;position:relative;max-width:760px;margin:auto}
+.balloon{position:absolute;width:88px;height:112px;border-radius:50% 50% 46% 46%;cursor:pointer;animation:float 3.2s ease-in-out infinite;box-shadow:inset -12px -12px 20px rgba(0,0,0,.18),inset 10px 8px 15px rgba(255,255,255,.18),0 12px 35px rgba(255,50,130,.12);transition:transform .25s,opacity .35s}
+.balloon:before{content:"";position:absolute;width:18px;height:10px;bottom:-5px;left:35px;background:inherit;clip-path:polygon(0 0,100% 0,50% 100%)}
+.balloon:after{content:"";position:absolute;left:44px;top:105px;width:1px;height:130px;background:rgba(255,255,255,.45)}
+.balloon:nth-child(1){left:5%;top:105px;background:#ff5f91;animation-delay:-.5s}.balloon:nth-child(2){left:18%;top:30px;background:#9c72ff;animation-delay:-1.8s}.balloon:nth-child(3){left:32%;top:130px;background:#ff8a5c;animation-delay:-.9s}.balloon:nth-child(4){left:47%;top:10px;background:#ff4f7b;animation-delay:-2.2s}.balloon:nth-child(5){left:61%;top:125px;background:#68b9ff;animation-delay:-1.2s}.balloon:nth-child(6){left:76%;top:45px;background:#c879ff;animation-delay:-2.7s}
+.balloon.popped{transform:scale(1.8);opacity:0;pointer-events:none}@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-18px) rotate(2deg)}}
+.chapter-nav{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:6;display:flex;flex-direction:column;gap:8px}.chapter-nav button{width:10px;height:10px;border:0;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;padding:0}.chapter-nav button.active{background:#ff7fa5;box-shadow:0 0 14px rgba(255,100,150,.7)}
+.photo{position:relative;transform-style:preserve-3d}.photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s ease,filter .8s ease}.photo:hover img{transform:scale(1.08);filter:saturate(1.15)}.photo:after{content:"";position:absolute;inset:0;border-radius:20px;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.18),transparent 35%,transparent 65%,rgba(255,90,140,.12))}.photo .caption{position:absolute;left:12px;right:12px;bottom:12px;padding:10px 13px;border-radius:13px;background:rgba(10,5,10,.62);backdrop-filter:blur(8px);color:#fff;font-size:.75rem;z-index:2}
+@media(max-width:750px){.balloons{height:330px}.balloon{width:62px;height:82px}.balloon:before{left:24px;width:14px}.balloon:after{left:31px;top:78px;height:120px}.chapter-nav{display:none}}
+
+</style>
+</head>
+<body>
+
+<div id="balloonGate"><div class="balloon-wrap">
+<div class="eyebrow">A birthday surprise</div><h2>Pop the balloons 🎈</h2>
+<p>Pop every balloon to unlock your little love story.</p>
+<div class="balloons">
+<div class="balloon"></div><div class="balloon"></div><div class="balloon"></div>
+<div class="balloon"></div><div class="balloon"></div><div class="balloon"></div>
+</div><div id="gateHint">6 balloons left ❤️</div></div></div>
+
+<div class="chapter-nav">
+<button onclick="goTo(0)"></button><button onclick="goTo(1)"></button><button onclick="goTo(2)"></button>
+<button onclick="goTo(3)"></button><button onclick="goTo(4)"></button><button onclick="goTo(5)"></button>
+<button onclick="goTo(6)"></button><button onclick="goTo(7)"></button><button onclick="goTo(8)"></button>
+<button onclick="goTo(9)"></button><button onclick="goTo(10)"></button></div>
+<canvas id="hearts"></canvas>
+
+<button class="music" id="musicBtn" title="Music">♫</button>
+<audio id="music" loop>
+  <!-- Put your song file in the same folder and change this to its filename -->
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<section class="hero">
+  <div class="container reveal">
+    <div class="eyebrow">A little surprise for you</div>
+    <h1>Happy Birthday,<br><span>Poojaa garuuu</span> ❤️</h1>
+    <p class="subtitle">
+      I could have simply wished you happy birthday… but you deserve more than a simple message.
+      So I made this little corner of the internet just for you.
+    </p>
+    <a class="btn" href="#wish">Open Your Surprise 💌</a>
+    <div class="scroll">↓ SCROLL SLOWLY ↓</div>
+  </div>
+</section>
+
+<section id="wish">
+  <div class="container center reveal">
+    <div class="eyebrow">Chapter One</div>
+    <h2 class="title">My Birthday Wish</h2>
+    <div class="letter">
+      <p>wish you many many more happy birthday🎂🎉poojaa garuuu🥰</p>
+      <p>you are the best special part in my life and today is your birthday which is a special day for me to ❤🥰 I want to make this day soo much special for you ❤my lovely sweet heart💖</p>
+      <p>may from this year you get all you want and achieve all of your goals</p>
+      <div class="signature">—  your mullapati saif malik❤️</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container center reveal">
+    <div class="eyebrow">Chapter Two</div>
+    <h2 class="title">Do You Know How I See You?</h2>
+    <p class="lead">
+      you are the first person who came soo close to me and my heart💖
+      you are more than anything for me. when you text I feel happy my 
+      heart dance💞. iam soo blessed that you came into my life as an angel 
+      who makes me smile every time i think about you. you have become soo special
+      to me that i wanted to be with you fro ever. you are <span style="color: #ff4d6d; background-color: #ffe6eb; font-weight: bold;">MY FIRST LOVE 💖</span>
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon">😊</div>
+        <h3>Your Smile</h3>
+        <p>YOUR SMILE IS ONE MY MOST FAVOTITE IN THIS WORLD<BR>
+        I CANT EXPRESS IN WORDS THAT HOW BEAUTIFUL YOUR SMILE IS<BR>
+        THE WAY YOU GET A CUET LITTLE DIMPLE WHEN YOU SMILE MAKES EVEN MORE BEAUTIFUL<BR>
+        I JUST LOVE IT WHEN YOU SMILE</p>
+      </div>
+      <div class="card">
+        <div class="icon">✨</div>
+        <h3>Your Personality</h3>
+        <p>ITS THE MOST PERFECT AND UNIQUE PERSONALITY YOU HAVE WHICH I LIKE<BR>
+        YOU HAVE A PERSONALITY THAT IS COMPLETELY YOUR OWN.<BR>
+YOU DON'T TRY TOO HARD TO IMPRESS PEOPLE, AND THAT'S ONE OF THE THINGS THAT MAKES YOU DIFFERENT.<BR>
+YOU'RE NATURALLY CARING, UNDERSTANDING, AND THOUGHTFUL. EVEN WHEN YOU DON'T SAY MUCH, THE WAY YOU BEHAVE 
+SHOWS HOW MUCH YOU ACTUALLY CARE.<br>
+YOU HAVE A STRONG PERSONALITY. EVEN WHEN YOU GET TIRED OR THINGS DON'T GO THE WAY YOU WANT, 
+THERE'S A PART OF YOU THAT KEEPS GOING.
+ </p>
+      </div>
+      <div class="card">
+        <div class="icon">🌷</div>
+        <h3>The Little Things</h3>
+        <p>YOU HAVE THIS SOFT AND INNOCENT SIDE THAT COMES OUT IN THE SMALLEST MOMENTS. 
+          SOMETIMES YOU DON'T EVEN REALIZE HOW SWEET YOU'RE BEING.<br>
+          STAYING WITH YOU, TALKING WITH YOU, EATING TOGETHER WITH YOU WAS MY BEST MEMORIES IN MY LIFE<BR>
+          WHEN YOU SUDDENLY LOOK AT ME WHILE IAM LOOKING AT YOU I GET STUN FOR SOME TIME LOOKING AT THE BEAUTIFUL 
+          EYES I HAVE EVER SEEN<BR>
+          YOUR HANDS ARE SOO SOFT THAT I DONT WANT TO LEAVE THEM WHEN EVER I GRAB.<BR>
+          AND WHEN YOU WALK IN FRONT OF ME. MY BODY AUTOMATICALLY FOLLOWS YOU TO BE CLOSE TO YOU AT ANY TIME.<BR>
+          YOU LOOK SOO CUTE WHILE EATING AND WHEN YOU SHARE YOUR FOOD IN YOUR PLATE WITH ME MAKES ME MORE HAPPY THAT 
+          MY MIND STOPS THINKING FOR THAT TIME LOOKING AT YOU SOO BEAUTIFU;
+</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container reveal">
+    <div class="center">
+      <div class="eyebrow">Chapter Three</div>
+      <h2 class="title">Our Story</h2>
+      <p class="lead">I WAS A GUY WHO WAS DOING HIS BORING DAILY ROUTINE GOING OFFICE DOING WORK PLAYING GAMES AND 
+        THATS IT.<BR>
+        BUT ONE DAY I MEET YOU AND THEN EVERYTHING HAS BEEN CHANGED EVERYDAY BECOME A EXCITING TO MEET YOU TALK TO YOU,
+        TO SPEND TIME WITH YOU, TO KNOW ABOUT YOU DAY BY DAY<BR>
+        AFTER MEETING MY LIFE IS TAKE A NEW START 
+        </p>
+    </div>
+
+    <div class="timeline">
+      <div class="event">
+        <div class="date">THE BEGINNING</div>
+        <div class="eventbox">
+          <h3>The First Time We Met</h3>
+          <p>IT WAS EVENING 7:45PM I HAVE LOGGED OUT AND CAME TO BUS STOP OF WATER TANK<BR>
+          EVERY ONE WENT I WAS ALSO ABOUT TO GO AFTER SENDING THEM ALL IN BUSS BUT MY EYES SUDDENLY SOME THING,
+          SOMETHING SOO SPECIAL, SOMETHING SOO BEAUTIFUL I EVER SEEN AND THEN IT WAS YOU LOOKING LIKE AN ANGEL COMING
+          TOWADS ME MY MIND SUDDENLY WENT OFF IT WAS MY FIRST TIME TO SEE YOU AND TO FEEL LIKE SOMETHING SPECIAL FROM YOU<BR>
+          AND THEN I WAS TRYING TO WAIT FOR YOU WITHOUT LETTING YOU KNOW THAT I WAS WAITING FOR YOU I WAENT TO GET EGGS JUST 
+          AS A TOPIC TO LOOK LIKE I WAS BUSY BT IN ACTUAL I WAS THERE ONLY FOR YOU<BR>
+          AND THEN YOU CAME TO THE STOP I CAME A LITTLE CLOSE WITH 6 EGGS IN MY HAND AND CALLED YOU<BR>
+           "heyy what are you doing" I ASKED FIRST<BR>
+           YOU SAID NOTHING LOOK AT ME AND LOOKING AT YOUR TAB "...."<BR>
+           AND THATS THE FIRST TIME I SEE YOU AT SOO CLOSE, HEIDING YOUR FACE IN MASK AND I SAW THOSE BEAUTIFUL EYES
+           GETTING HIDE BESIDE YOUR BEAUTIFUL SILKY HAIR<BR>
+           "yantha indhi" I ASKED<BR>
+           "24 indhi" YOU SAID<BR>
+           THAT WAS THE FIRST TIME I LISTEN YOUR SOFT BEAUTIFUL VOICE<BR>
+           "your name is <span style="color: #ff4d6d; background-color: #ffe6eb; font-weight: bold;">POOJA</span> right" I ASKED<BR>
+           "hu yes" YOU REPLIED WITH YOUR SOFT BEAUTIFUL VOICE<BR>
+           "where do you come from" I ASKED<BR>
+           "ramnagara" YOU REPLIED<BR>
+           "how far is it" I ASKED<BR>
+           "40KM" YOU SAID<BR>
+           I WAS REALLY SHOCKED AFTER LISTENING THAT<BR>
+           "you come daily from that far howw" I ASKED<BR>
+           "yes by train" YOU SAID<BR>
+           I WAS GOT SHOCKED AGAIN<BR>
+           "you are soo grate" I ASKED<BR>
+           "mm..." YOU RESPONDED<BR><BR>
+           YOU ARE ACTUALLY SOO GRATE MY LOVELY POOJAA GARUU <BR><BR>
+           "how do you know telugu you speak very good telugu" I ASKED<BR>
+           "my father is from andhra" YOU SAID<BR>
+           "ohh" IT WAS MEE <BR>
+           BUS HAS CAME TILL NOW YOU WERE ABOUT TO GO<BR>
+           "ok byee" I SAID <BR>
+           "mm.. byee.." YOU WAVES YOUR HAND A LITTLE AND WENT INSIDE THE BUS<BR>
+           SOO THAT WAS THE FIRST DAY WE HAD OUR TALK WHICH WAS SOO BEAUTIFUL 
+          </p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="date">THEN</div>
+        <div class="eventbox">
+          <h3>When We Got Close</h3>
+          <p>FROM THAT DAY I SLOWLY CONTINUE TALKING WITH YOU AND WE WENT YOU "ISCON TEMPLE" WHICH WAS 
+            OUR FIRST GOING OUT TOGETHER YES THERE WAS SOME OTHER PEOPLE TOO BUT AT THAT TIME I ASKED YOU
+            TO LETS GO OUT FOR SOME WERE AND YOU WERE ALSO PLANNING TO AND ALL IN INSTANT WE HAVE MADE THE PLAN
+            AND DONE WE WENT<BR>
+            THERE WAS REALLY SOO RUSH BUT THERE WAS THE FIRST TIME YOU GRABE MY HAND TOO PULL ME OFF FROM THE RUSH
+            I WAS SOO HAPPY AT THAT TIME FOR REAL<BR>
+            AND THE NEXT PLANNED EVENT WE WENT TOGETHER ON NEW YEAR WAS SOO EXCITED FILLED WITH SOO HAPPINESS IN ME<BR>
+            AND AFTER THAT WE BECOME SOO CLOSE THAT WE DIDN'T EVEN EXPECT
+            
+          </p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="date">THAT MOMENT</div>
+        <div class="eventbox">
+          <h3>When You Became Special</h3>
+          <p>ITS WAS FIRST TIME WHEN YOU AND ME WAS GOING TO BUS STAND IN BUS
+          I WAS GRAB YOUR HAND AND LAY MY HEAD ON YOUR SHOULDER AND SAID THAT I LIKE YOU❤<BR>
+          IT WAS THE FIRST TIME ME SAYING THAT TO YOU AND THAT TIME YOU HAVE GAVE A SMILE WHICH
+          IS THE MOST BEAUTIFUL 😍✨❤ THAN ANYTHING ELSE <BR>
+          YOU WERE ALWAYS SPECIAL TO MY SWEET HEART❤💝💕
+          </p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="date">TODAY</div>
+        <div class="eventbox">
+          <h3>And Here We Are ❤️</h3>
+          <p>AND NOW SOMETIMES WE FIGHT SOMETIMES WE UNDERSTAND SOME TIMES NOT
+          SOME TIME WE DON'T KNOW WHAT WE THINK ESPECIALLY ME 😅 <BR>
+          BUT WE ARE BECOME A BOND THAT NEVER BROKE I HAVE TOTALLY GIVE MY HEART TO YOU
+          AND WE KNOW EACH OTHER SOO GOOD🥰🥰<BR>
+          WE TAKE CARE OF EACH OTHER💞 <BR>
+          I START MY EVERYDAY BY TEXTING YOU AND SEEING YOUR PHOTO AND HAVING A SMILE IN  
+          MY FACE AND COOLING MY HEART💕💖<BR>
+          YOU HAVE BECOME SOO PRECIOUS AND IMPORTANT TO ME THAT I DON'T WANT TO LOOSE YOU <BR>
+          <span style="color: #ff4d6d; background-color: #ffe6eb; font-weight: bold;">MY SWEET HEART💝💕</span> 
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container center reveal">
+    <div class="eyebrow">Chapter Four</div>
+    <h2 class="title">Our Memories</h2>
+
+    <div class="gallery">
+<div class="photo"><img src="https://drive.google.com/thumbnail?id=19VmIL0UjE0cFRSTiPE3_hWhlnVl31ucn&sz=s800" alt="Memory 1"><div class="caption">OUR FRIST EVENT ON NEW YEAR</div></div>
+<div class="photo"><img src="https://drive.google.com/thumbnail?id=1ZIcE6L4D0_256HM4GGmoXQ9pOama9_sG&sz=s800%22" alt="Memory 2"><div class="caption">THE FIRST PIC YOU TOOK IN MY MOBILE</div></div>
+<div class="photo"><img src="https://drive.google.com/thumbnail?id=1-Wwzhh7oR8JMUjGBaxnNcUPr1GAmiIQc&sz=s800%22" alt="Memory 3"><div class="caption">ITS THE PROFILE PIC WHEN THE TIME WE STARTED CHATTING LOOK HOW BEAUTIULF IT IS</div></div>
+<div class="photo"><img src="https://drive.google.com/thumbnail?id=1-YWMYEbwVFX4NpnJAnWXL-Zgk5ChPep5&sz=s800%22" alt="Memory 4"><div class="caption">OUR SECIND TRIP WITH YOUR FAMILY WHERE I MEET THEM FOR THE FRST TIME.<BR> AND IT WAS REALLY AWSOME AND ENJOYED A LOT</div></div>
+<div class="photo"><img src="https://drive.google.com/thumbnail?id=1lNFNIjSJEZLsd1Mt33dWj0-P3cnyaWfT&sz=s800%22" alt="Memory 5"><div class="caption">THE THIRD TRIP WE WENT TO GETHER WHERE I WAS REALLY REALLY HAPPY BY SEEING SOOOO MUCHH BEAUTIFUL AND IT WAS GOOD WE WENT SOO FAR THAT TIME ONLY YOU ME AND OTHERS</div></div>
+<div class="photo"><img src="https://drive.google.com/thumbnail?id=1FkwD958qJhVOyCNnUB0NWZ-39vlvH1sS&sz=s800%22" alt="Memory 6"><div class="caption">THE FOURTH AND MY MOST FAVOURIET</div></div>
+</div>
+  </div>
+</section>
+
+<section>
+  <div class="container center reveal">
+    <div class="eyebrow">Chapter Five</div>
+    <h2 class="title">Things I Never Say Enough</h2>
+    <div class="letter">
+      <p>YOU ARE REALLY MY FIRST LOVE POOJAA GARUUU🥰❤ I REALLY LOVE YOU SOOOOO MUCH 💞❤</p>
+      <p>IAM SOOO THANKFUL TO YOU THAT YOU CAME INTO MY LIFE ❤</p>
+      <p>YOU MIGHT NOT HAVE REALIZE BUT EVERY SINGLE THINKING ABOUT YOU IS PRECIOUS AND IMPORTANT TO ME❤💞</p>
+      <p>SARANGHAE💗🌹</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container center reveal">
+    <div class="eyebrow">Chapter Six</div>
+    <h2 class="title">Thank You ❤️</h2>
+    <div class="letter">
+      <p>Thank you for...</p>
+      <p>FOR COMING INTO MY LIFE❤</p>
+      <p>FOR BECOMING A SPECIAL PERSON TO ME💞</p>
+      <p>FOR UNDERSTANDING ME AND MY EVERYTHING</p>
+      <p>FOR HANDLING ME EVEN THOUGH IAM NOT GOOD ENOUGH 💞🥰</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container center reveal">
+    <div class="eyebrow">Chapter Seven</div>
+    <h2 class="title">My Promises</h2>
+    <div class="cards">
+      <div class="card"><div class="icon">🤝</div><h3>Promose One</h3><p>I WILL NEVER LEAVE YOU ALONE WILL BE STANDING A SIDE WITH YOU NO MATTER HOW DIFFICULT THE PROBLEM IS</p></div>
+      <div class="card"><div class="icon">🌙</div><h3>Promise Two</h3><p>SOMETIMES MIGHT TIKE COME THAT WE DON'T UNDERSTAND EACH OTHER AND WE FIGHT,<BR> EVEN THOUGH I ALWAYS FEEL THE SAME FOR YOU AND NEVER BE LETTING YOU GO</p></div>
+      <div class="card"><div class="icon">❤️</div><h3>Promise Three</h3><p>WE WILL DEFINITELY GOING TO THE KOREA TOGETHER MY LOVELY POOJAA GARUUU❤💗🌹</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container center reveal">
+    <div class="eyebrow">The Letter</div>
+    <h2 class="title">A Letter From My Heart</h2>
+    <div class="letter">
+      <p>Dear POOJAA GARUUU💗,</p>
+      <p>WHIS YOU HAPPY BIRTHDAY🥰🥰 I HAVE MADE THIS FOR YOU❤ DON'T KNOW THAT YOU MIGHT HAVE READ ALL THAT AND CAME THIS FARR</p>
+      <p>BUT IF YOU HAVE CAME THEN ONLY YOU ARE READING THIS THANK YOU SOOO MUCH TO READ ALL THOSE THINGS WHAT I HAVE WRITTEN. YOU TO KNOW THAT HOW SPECIAL YOU ARE TO ME I CAN'T EXPRESS ALL MY HEART HERE CAUSE I DON'T KNOW HOW TO DO THAT
+      ITS MY FIRST TIME DOING ALL THIS DON'T KNOW YOU MAY HAVE LIKE THIS OR NOT BUT THANK YOU SOO MUCH FOR COMING THIS FARR. WE WILL BE TOGETHER AND GO TO KOREA AND I WILL MAKE YOU TP ACHIEVE YOUR GOALS</p>
+      <p>I WILL DEFINITELY MAKE IT HAPPEN WHAT YOU WANT AND WHICH MAKES YOU HAPPY 💗🌹</p>
+      <p>ONCE YOU SAID THAT AFTER GOING KOREA YOU WILL WANTED TO BE MARRIAGE WITH A KOREAN GUYY. WHICH IS GOOD I WILL TL SUPPORT YOU</p>
+      <p>CAUSE I KNOW THAT WE CAN'T BE. I DIDN'T SAY THIS BUT EVEN THOUGH YOU ALREADY KNOW THAT I LOVE YOU AND I WANTED TO LIVE MY LIFE TOGETHER WITH YOU WHICH IS NOT POSSIBLE. BUT I AM HAPPY BEING WITH YOU MAKING YOU WHAT YOU WANT BUT IT'S NEVER CHANGE THAT YOU ARE MY FIRST LOVE POOJAA GARUUU 🌹💗 I LOVE YOU🌹💞💗</p>
+      <div class="signature">Forever yours,<br>MULLAPATI SAIF MALIK ❤️</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container center reveal">
+    <div class="eyebrow">One More Chapter</div>
+    <h2 class="title">Our Future</h2>
+    <div class="letter">
+      <p>LETS GO KOREA TOGETHER AND MAKE YOUR EVERY DREAM HAPPEN REAL</p>
+      <p>AND I WOULD LOVE TO EXPLORE ALL OVER THE WORLD WITH YOU NOT TO MENTION THAT BEING YOU IS MY ONLY WORLD</p>
+      <p>WHEN YOU STAY WITH ME FEELS LIKE I WANT NOTHING MORE THAN THIS</p>
+      <p>I WILL BE FOR YOU EVERYTIME YOU NEED IN YOUR GOOD DAYS IN YOUR BAD DAYS I WILL ALWAYS STAY FOR YOU❤💗</p>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="container reveal">
+    <div class="eyebrow">One Last Thing</div>
+    <h2>My love for you<br>doesn't have an ending. ❤️</h2>
+    <p>EVEN I WOULD HAVE 5 LIFE'S WITH 5 DIFFERENT NAMES AND WITH 5 DIFFERENT PARENTS I WOULD FALL I IN LOVE WITH 5 DIFFERENT TIMES BUT ONLY WITH YOU MY LOVELY POOJAA GARUU 💗💞</p>
+    <div class="signature">Happy Birthday, POOJAA GARUU ❤️</div>
+    <div class="small">SAIF MALIK × POOJAA &nbsp; • &nbsp; 16/09/2026</div>
+  </div>
+</section>
+
+<script>
+const canvas=document.getElementById("hearts"),ctx=canvas.getContext("2d");
+let W,H,hearts=[];
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
+addEventListener("resize",resize);resize();
+for(let i=0;i<35;i++) hearts.push({
+ x:Math.random()*W,y:Math.random()*H,s:Math.random()*2+1,
+ a:Math.random()*Math.PI*2,v:Math.random()*.35+.1
+});
+function draw(){
+ ctx.clearRect(0,0,W,H);
+ hearts.forEach(h=>{
+   h.y-=h.v;h.a+=.01;
+   if(h.y<-20){h.y=H+20;h.x=Math.random()*W}
+   ctx.save();ctx.translate(h.x,h.y);ctx.rotate(Math.sin(h.a)*.3);
+   ctx.globalAlpha=.25;ctx.font=(10+h.s*4)+"px serif";ctx.fillText("♥",0,0);ctx.restore();
+ });
+ requestAnimationFrame(draw)
+} draw();
+
+const obs=new IntersectionObserver(entries=>{
+ entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("show")})
+},{threshold:.15});
+document.querySelectorAll(".reveal").forEach(x=>obs.observe(x));
+
+const music = document.getElementById("music");
+const btn = document.getElementById("musicBtn");
+
+let musicStarted = false;
+
+function startMusic() {
+    if (!musicStarted) {
+        music.volume = 0.7;
+
+        music.play().then(() => {
+            musicStarted = true;
+            btn.textContent = "❚❚";
+        }).catch(() => {});
+    }
+}
+
+btn.onclick = () => {
+    if (music.paused) {
+        music.play().then(() => {
+            musicStarted = true;
+            btn.textContent = "❚❚";
+        }).catch(() => {});
+    } else {
+        music.pause();
+        btn.textContent = "♫";
+    }
+};
+
+const gate=document.getElementById("balloonGate"), balloons=[...document.querySelectorAll(".balloon")], hint=document.getElementById("gateHint");
+let remaining=balloons.length;
+balloons.forEach(b => b.onclick = () => {
+
+    if (b.classList.contains("popped")) return;
+
+    // 🎵 START MUSIC WHEN SHE POPS THE FIRST BALLOON
+    startMusic();
+
+    // 🎈 POP BALLOON
+    b.classList.add("popped");
+    remaining--;
+
+    // Update message
+    hint.textContent = remaining
+        ? `${remaining} balloon${remaining === 1 ? "" : "s"} left ❤️`
+        : "Unlocked… your story begins ❤️";
+
+    // ❤️ Heart burst
+    burstHearts(b);
+
+    // Open the story after all balloons are popped
+    if (!remaining) {
+        setTimeout(() => {
+            gate.classList.add("hidden");
+        }, 650);
+    }
+});
+function burstHearts(el){const r=el.getBoundingClientRect();for(let i=0;i<12;i++){const s=document.createElement("span");s.textContent=["♥","✨","💗"][i%3];s.style.cssText=`position:fixed;z-index:30;left:${r.left+r.width/2}px;top:${r.top+r.height/2}px;pointer-events:none;font-size:${12+Math.random()*14}px;transition:1s ease;`;document.body.appendChild(s);requestAnimationFrame(()=>{s.style.transform=`translate(${(Math.random()-.5)*180}px,${-80-Math.random()*150}px) scale(.5)`;s.style.opacity="0"});setTimeout(()=>s.remove(),1100)}}
+const sections=[...document.querySelectorAll("body > section")],dots=[...document.querySelectorAll(".chapter-nav button")];
+function goTo(i){sections[i]?.scrollIntoView({behavior:"smooth"})}
+const chapterObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){let i=sections.indexOf(e.target);dots.forEach((d,n)=>d.classList.toggle("active",n===i))}}),{threshold:.5});
+sections.forEach(s=>chapterObserver.observe(s));
+
+</script>
+</body>
+</html>
